@@ -51,7 +51,9 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json(gamesWithStats);
+    const response = NextResponse.json(gamesWithStats);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    return response;
   } catch (err: any) {
     return NextResponse.json({
       error: 'unexpected error',

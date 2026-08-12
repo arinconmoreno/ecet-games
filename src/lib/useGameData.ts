@@ -15,9 +15,10 @@ export function useGameData() {
 
   const refresh = useCallback(async () => {
     try {
+      const t = Date.now();
       const [gamesRes, regRes] = await Promise.all([
-        fetch('/api/games'),
-        fetch('/api/registrations'),
+        fetch(`/api/games?t=${t}`, { cache: 'no-store' }),
+        fetch(`/api/registrations?t=${t}`, { cache: 'no-store' }),
       ]);
       const gamesData = await gamesRes.json();
       const regData = await regRes.json();

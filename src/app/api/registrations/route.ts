@@ -125,6 +125,11 @@ export async function DELETE() {
   }
 
   const sb = getServiceSupabase();
+
+  // Delete scores first
+  await sb.from('scores').delete().eq('user_id', user.id);
+
+  // Then delete registration
   const { error } = await sb
     .from('registrations')
     .delete()

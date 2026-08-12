@@ -22,7 +22,9 @@ export function useGameData() {
       ]);
       const gamesData = await gamesRes.json();
       const regData = await regRes.json();
-      setGames(gamesData);
+      // Handle debug format (games nested) or direct array
+      const gamesList = Array.isArray(gamesData) ? gamesData : (gamesData.games || []);
+      setGames(gamesList);
       setMyRegistration(regData.registration);
     } catch {
       // silent

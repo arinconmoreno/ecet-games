@@ -3,12 +3,13 @@ import { getServiceSupabase } from '@/lib/supabase';
 import { GAMES } from '@/data/games';
 
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export async function GET() {
   try {
     const sb = getServiceSupabase();
 
-    // Simple query first - no joins
     const { data: registrations, error: regError } = await sb
       .from('registrations')
       .select('id, user_id, game_id');
@@ -17,11 +18,9 @@ export async function GET() {
       return NextResponse.json({
         error: 'registrations query failed',
         details: regError.message,
-        hint: regError.hint,
       }, { status: 500 });
     }
 
-    // Get users separately
     const { data: users, error: usersError } = await sb
       .from('users')
       .select('id, name, email');
@@ -51,8 +50,19 @@ export async function GET() {
       };
     });
 
-    const response = NextResponse.json(gamesWithStats);
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    // DEBUG: add raw data and timestamp
+    const response = NextResponse.json({
+      _debug: {
+        timestamp: new Date().toISOString(),
+        rawRegistrations: registrations,
+        totalUsers: users?.length || 0,
+      },
+      games: gamesWithStats,
+    });
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    response.headers.set('Surrogate-Control', 'no-store');
     return response;
   } catch (err: any) {
     return NextResponse.json({

@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap');
+
+:root {
+  --bg: #0A0A0A;
+  --bg-card: #151515;
+  --bg-nav: #111111;
+  --sofka-orange: #FF7E08;
+  --sofka-teal: #06C8C8;
+  --sofka-violet: #9747FF;
+  --sofka-pink: #FE9CAB;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* Radial background gradient */
+.bg-radial-glow {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 126, 8, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(6, 200, 200, 0.04) 0%, transparent 60%),
+    #0A0A0A;
+}
+
+/* Gradient accent bar */
+.gradient-bar {
+  background: linear-gradient(90deg, #FF7E08, #06C8C8, #9747FF);
+  height: 3px;
+}
+
+/* Capacity progress bar */
+.capacity-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: #222;
+  overflow: hidden;
+}
+
+.capacity-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 126, 8, 0.15);
+}
+
+/* Animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-slide-up-delay-1 { animation-delay: 0.05s; }
+.animate-slide-up-delay-2 { animation-delay: 0.1s; }
+.animate-slide-up-delay-3 { animation-delay: 0.15s; }
+.animate-slide-up-delay-4 { animation-delay: 0.2s; }

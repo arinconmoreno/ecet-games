@@ -6,7 +6,7 @@ import { GAMES, PRIZE_STRUCTURE } from '@/data/games';
 const RULES = [
   'Solo puedes inscribirte en 1 juego',
   'Las inscripciones cierran el 14 de agosto de 2026 a las 11:59 PM COT',
-  'Los premios en efectivo son para el 1er lugar de cada juego',
+  'El premio del 1er lugar se entrega como donación a afectados por el terremoto a nombre del ganador',
   'Los reconocimientos E-CET se entregarán digitalmente',
   'Los juegos presenciales se realizarán en la sede de Medellín',
   'Los juegos virtuales se pueden jugar desde cualquier ubicación',

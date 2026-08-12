@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getServiceSupabase } from '@/lib/supabase';
 import { GAMES } from '@/data/games';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const sb = getServiceSupabase();

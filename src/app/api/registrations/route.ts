@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { getServiceSupabase } from '@/lib/supabase';
 import { GAMES, REGISTRATION_DEADLINE } from '@/data/games';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Get current user's registration
 export async function GET() {
   const session = await getServerSession(authOptions);

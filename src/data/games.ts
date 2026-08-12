@@ -58,7 +58,7 @@ export const GAMES: GameConfig[] = [
 export const REGISTRATION_DEADLINE = new Date('2026-08-14T23:59:59-05:00');
 
 export const PRIZE_STRUCTURE = {
-  first: { label: '1er Lugar', prize: '$200.000 COP / $65 USD', color: '#FFD700' },
+  first: { label: '1er Lugar', prize: 'Donación de $200.000 COP a afectados por el terremoto', color: '#FFD700' },
   second: { label: '2do Lugar', prize: 'Reconocimiento E-CET', color: '#C0C0C0' },
   third: { label: '3er Lugar', prize: 'Reconocimiento E-CET', color: '#CD7F32' },
 };

@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { getServiceSupabase } from '@/lib/supabase';
 import { isAdminEmail } from '@/data/contacts';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Get scores for a game
 export async function GET(req: NextRequest) {
   const gameId = req.nextUrl.searchParams.get('gameId');

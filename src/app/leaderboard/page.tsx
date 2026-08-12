@@ -36,7 +36,8 @@ function LeaderboardContent() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/scores?gameId=${activeGame}`)
+    const t = Date.now();
+    fetch(`/api/scores?gameId=${activeGame}&t=${t}`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((d) => setScores(d.scores || []))
       .catch(() => setScores([]))

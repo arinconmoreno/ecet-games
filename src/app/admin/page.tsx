@@ -43,12 +43,14 @@ function AdminContent() {
 
   useEffect(() => {
     setLoading(true);
+    const t = Date.now();
     Promise.all([
-      fetch(`/api/scores?gameId=${activeGame}`).then((r) => r.json()),
-      fetch('/api/games').then((r) => r.json()),
+      fetch(`/api/scores?gameId=${activeGame}&t=${t}`, { cache: 'no-store' }).then((r) => r.json()),
+      fetch(`/api/games?t=${t}`, { cache: 'no-store' }).then((r) => r.json()),
     ])
       .then(([scoresData, gamesData]) => {
-        const game = gamesData.find((g: any) => g.id === activeGame);
+        const gamesList = Array.isArray(gamesData) ? gamesData : (gamesData.games || []);
+        const game = gamesList.find((g: any) => g.id === activeGame);
         const parts: Participant[] = game?.participants || [];
         setParticipants(parts);
 

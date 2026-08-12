@@ -4,6 +4,33 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { isAuthorizedEmail, isAdminEmail, getContactByEmail } from '@/data/contacts';
 import { getServiceSupabase } from '@/lib/supabase';
 
+// Helper: find or create user (no .single(), no joins)
+async function findOrCreateUser(email: string, name: string) {
+  const sb = getServiceSupabase();
+
+  // Try to find existing user
+  const { data: users } = await sb
+    .from('users')
+    .select('id, name, email, is_admin')
+    .ilike('email', email);
+
+  if (users && users.length > 0) {
+    return users[0];
+  }
+
+  // Create new user
+  const { data: created } = await sb
+    .from('users')
+    .insert({
+      name,
+      email: email.toLowerCase(),
+      is_admin: isAdminEmail(email),
+    })
+    .select('id, name, email, is_admin');
+
+  return created && created.length > 0 ? created[0] : null;
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -30,37 +57,12 @@ export const authOptions: NextAuthOptions = {
         if (!contact) return null;
 
         try {
-          const sb = getServiceSupabase();
-          const { data: existing } = await sb
-            .from('users')
-            .select('*')
-            .eq('email', email)
-            .single();
-
-          if (!existing) {
-            const { data: newUser } = await sb
-              .from('users')
-              .insert({
-                name: contact.name,
-                email: email,
-                is_admin: isAdminEmail(email),
-              })
-              .select()
-              .single();
-
-            return {
-              id: newUser?.id || email,
-              name: contact.name,
-              email: email,
-              isAdmin: isAdminEmail(email),
-            } as any;
-          }
-
+          const user = await findOrCreateUser(email, contact.name);
           return {
-            id: existing.id,
-            name: existing.name,
-            email: existing.email,
-            isAdmin: existing.is_admin,
+            id: user?.id || email,
+            name: contact.name,
+            email: email,
+            isAdmin: isAdminEmail(email),
           } as any;
         } catch {
           return {
@@ -81,15 +83,7 @@ export const authOptions: NextAuthOptions = {
 
       try {
         const contact = getContactByEmail(email);
-        const sb = getServiceSupabase();
-        await sb.from('users').upsert(
-          {
-            name: contact?.name || user.name || '',
-            email: email,
-            is_admin: isAdminEmail(email),
-          },
-          { onConflict: 'email' }
-        );
+        await findOrCreateUser(email, contact?.name || user.name || '');
       } catch {
         // Continue even if DB not ready
       }

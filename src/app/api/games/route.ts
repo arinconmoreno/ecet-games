@@ -15,10 +15,7 @@ export async function GET() {
       .select('id, user_id, game_id');
 
     if (regError) {
-      return NextResponse.json({
-        error: 'registrations query failed',
-        details: regError.message,
-      }, { status: 500 });
+      return NextResponse.json({ error: regError.message }, { status: 500 });
     }
 
     const { data: users, error: usersError } = await sb
@@ -26,10 +23,7 @@ export async function GET() {
       .select('id, name, email');
 
     if (usersError) {
-      return NextResponse.json({
-        error: 'users query failed',
-        details: usersError.message,
-      }, { status: 500 });
+      return NextResponse.json({ error: usersError.message }, { status: 500 });
     }
 
     const userMap = new Map((users || []).map((u: any) => [u.id, u]));
@@ -56,9 +50,6 @@ export async function GET() {
     response.headers.set('Surrogate-Control', 'no-store');
     return response;
   } catch (err: any) {
-    return NextResponse.json({
-      error: 'unexpected error',
-      message: err.message,
-    }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
